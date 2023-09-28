@@ -1,0 +1,30 @@
+Table Schema:
+
+
+create table icc_world_cup
+(
+Team_1 Varchar(20),
+Team_2 Varchar(20),
+Winner Varchar(20)
+);
+INSERT INTO icc_world_cup values('India','SL','India');
+INSERT INTO icc_world_cup values('SL','Aus','Aus');
+INSERT INTO icc_world_cup values('SA','Eng','Eng');
+INSERT INTO icc_world_cup values('Eng','NZ','NZ');
+INSERT INTO icc_world_cup values('Aus','India','India');
+
+
+Query:
+
+WITH CTE AS (
+SELECT Team_1 as Team_Name,Winner
+FROM stats
+UNION ALL
+SELECT Team_2 as Team_Name,Winner
+FROM stats
+)
+
+SELECT Team_Name,COUNT(Team_Name) as Matches_Played,SUM(CASE WHEN Winner = Team_Name THEN 1 ELSE 0 END) AS Number_of_wins,
+SUM(CASE WHEN Winner! = Team_Name THEN 1 ELSE 0 END) AS Number_of_loss
+FROM CTE
+GROUP BY Team_Name
